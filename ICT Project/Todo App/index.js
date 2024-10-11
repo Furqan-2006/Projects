@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const updateTodo = (todoItem) => {
-    const newTodoText = prompt('Edit List item:', todoItem.querySelector('textarea').value); // Use .value
     if (newTodoText !== null) {
       todoItem.querySelector('textarea').value = newTodoText; // Use .value
       saveTodos(); // Update localStorage after editing
