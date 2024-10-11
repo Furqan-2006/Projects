@@ -6,14 +6,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Load Todos from localStorage on page load
   const loadTodos = () => {
     const todos = JSON.parse(localStorage.getItem('todos')) || [];
-    todos.forEach(todo => addtodo(todo.text)); // Add todo from localStorage to the list
+    todos.forEach(todo => addTodo(todo.text)); // Add todo from localStorage to the list
   };
 
   // Save Todos to localStorage
   const saveTodos = () => {
     const todos = [];
     document.querySelectorAll('.todoItem').forEach(todoItem => {
-      const todoText = todoItem.querySelector('span').textContent;
+      const todoText = todoItem.querySelector('textarea').value; // Use .value for textarea
       todos.push({ text: todoText });
     });
     localStorage.setItem('todos', JSON.stringify(todos));
@@ -27,23 +27,33 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const updateTodo = (todoItem) => {
-    const newTodoText = prompt('Edit List item:', todoItem.querySelector('span').textContent);
+    const newTodoText = prompt('Edit List item:', todoItem.querySelector('textarea').value); // Use .value
     if (newTodoText !== null) {
-      todoItem.querySelector('span').textContent = newTodoText;
+      todoItem.querySelector('textarea').value = newTodoText; // Use .value
       saveTodos(); // Update localStorage after editing
     }
   };
 
-  const addtodo = (todoText) => {
+  // Function to auto-resize the textarea
+  const autoResizeTextarea = (textarea) => {
+    textarea.style.height = 'auto'; // Reset the height
+    textarea.style.height = `${textarea.scrollHeight}px`; // Set the height to match the content
+  };
+
+  const addTodo = (todoText) => {
     const todoItem = document.createElement('li');
     todoItem.classList.add('todoItem');
     todoItem.innerHTML = `
-        <span class="todo-text">${todoText}</span>
+        <textarea class="todo-text">${todoText}</textarea>
         <button title="delete" class="delete-btn">DEL</button>
         <button title="edit" class="edit-btn">EDIT</button>
     `;
 
     todoList.appendChild(todoItem);
+
+    const textarea = todoItem.querySelector('textarea');
+    autoResizeTextarea(textarea); // Auto-resize when the item is added
+    textarea.addEventListener('input', () => autoResizeTextarea(textarea)); // Auto-resize on input
 
     // Add event listeners for delete and edit buttons
     todoItem.querySelector('.delete-btn').addEventListener('click', () => {
@@ -52,38 +62,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let hoveredItem = null;
 
-    // Detect when the mouse enters the element
-    todoItem.querySelector('.todo-text').addEventListener('mouseenter', function () {
+    // Detect mouse hover on todo text area
+    textarea.addEventListener('mouseenter', () => {
       hoveredItem = todoItem; // Store the currently hovered item
     });
 
-    // Detect when the mouse leaves the element
-    todoItem.querySelector('.todo-text').addEventListener('mouseleave', function () {
+    textarea.addEventListener('mouseleave', () => {
       hoveredItem = null; // Reset the hovered item when the mouse leaves
     });
 
-    // Listen for the Delete key press globally
-    document.addEventListener('keydown', function (event) {
-      if (event.key === 'Delete' && hoveredItem) {
-        deleteTodo(hoveredItem); // Delete the hovered item if the Delete key is pressed
+    // Reusable function for handling keydown events
+    const handleKeydown = (event, key, action) => {
+      if (event.key === key && hoveredItem) {
+        action(hoveredItem); // Perform action if the key is pressed on a hovered item
       }
-    });
-    // liten for the enter key to edit 
-    document.addEventListener('keydown', function (event) {
-      if (event.key === 'Enter' && hoveredItem) {
-        updateTodo(hoveredItem); // Delete the hovered item if the Delete key is pressed
-      }
+    };
+
+    // Listen for Delete and Enter keys globally
+    document.addEventListener('keydown', (event) => {
+      handleKeydown(event, 'Delete', deleteTodo);
     });
 
     todoItem.querySelector('.edit-btn').addEventListener('click', () => {
       updateTodo(todoItem);
     });
 
-    if (window, innerWidth < 769) {
-      todoItem.querySelector('.todo-text').addEventListener('click', () => {
+    if (window.innerWidth < 769) {
+      textarea.addEventListener('click', () => {
         updateTodo(todoItem);
       });
-      todoItem.querySelector('.todo-text').setAttribute('title', 'click to edit')
+      textarea.setAttribute('title', 'click to edit');
     }
 
     // Update button text based on screen size for the current item
@@ -95,29 +103,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Function to handle button text updates for screen resize
   const updateButtonText = (button) => {
-    if (window.innerWidth < 1199 && window.innerWidth) {
-      if (button.classList.contains('edit-btn')) {
-        button.innerText = '+';
-      } else if (button.classList.contains('delete-btn')) {
-        button.innerText = 'x';
-      }
+    if (window.innerWidth < 1199) {
+      button.innerText = button.classList.contains('edit-btn') ? '+' : 'x';
     } else {
-      if (button.classList.contains('edit-btn')) {
-        button.innerText = 'EDIT';
-      } else if (button.classList.contains('delete-btn')) {
-        button.innerText = 'DEL';
-      }
+      button.innerText = button.classList.contains('edit-btn') ? 'EDIT' : 'DEL';
     }
   };
 
   // Resize the "Add" button text based on screen size
   const updateAddButtonText = () => {
-    if (window.innerWidth < 768) {
-      add.innerHTML = '+';
-
-    } else {
-      add.innerHTML = 'Add';
-    }
+    add.innerHTML = window.innerWidth < 768 ? '+' : 'Add';
   };
 
   // Initial screen size check
@@ -137,8 +132,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Handle adding new todos
   add.addEventListener('click', () => {
-    if (input.value.trim() !== '') {s 
-      addtodo(input.value.trim());
+    if (input.value.trim() !== '') {
+      addTodo(input.value.trim());
       input.value = '';
     }
   });
@@ -146,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Handle pressing "Enter" to add todos
   input.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' && input.value.trim() !== '') {
-      addtodo(input.value.trim());
+      addTodo(input.value.trim());
       input.value = '';
     }
   });

@@ -2,7 +2,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-}
+} 
 
 body {
     background: linear-gradient(135deg, rgba(34, 49, 63, 0.9), rgba(23, 32, 42, 0.9) 30%, rgb(26, 26, 64, 0.8) 60%, rgba(131, 184, 236, 0.902) 100%);
@@ -84,12 +84,12 @@ body {
     width: 100%;
 }
 
-.todo-app ul li:nth-child(odd) {
+.todo-app ul li textarea:nth-child(odd) {
     background-color: #003457;
     color: whitesmoke;
 }
 
-.todo-app ul li:nth-child(even) {
+.todo-app ul li textarea:nth-child(even) {
     background-color: #004268;
     color: whitesmoke;
 
@@ -102,17 +102,22 @@ body {
 
 }
 
-.todo-app ul li span {
+.todo-app ul li textarea {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     padding: 0.5rem;
     font-size: 1rem;
     color: whitesmoke;
-    text-wrap: wrap;
-    overflow: auto;
+    white-space: pre-wrap;    /* Proper text wrapping */
+    overflow: hidden;         /* Hides scrollbars */
     width: 100%;
+    border: none;
     border-bottom: 0.2px solid blue;
-
-
+    outline: none;
+    resize: none;             /* Disable resizing */
+    box-sizing: border-box;   /* Include padding and border in width/height */
+    min-height: 40px;
 }
+
 
 .todo-app ul li:hover {
     background-color: gray;
@@ -168,7 +173,7 @@ body {
         padding: 0.4rem;
     }
 
-    .todo-app ul li span {
+    .todo-app ul li textarea {
         font-size: 1rem;
     }
 
@@ -181,7 +186,7 @@ body {
         width: 10%;
     }
 
-    .todo-app ul li span {
+    .todo-app ul li textarea {
         font-size: 0.9rem;
         padding: 0.4rem;
     }
