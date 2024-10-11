@@ -35,6 +35,12 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // Function to auto-resize the textarea
+  // const autoResizeTextarea = (textarea) => {
+  //   textarea.style.height = 'auto'; // Reset the height
+  //   textarea.style.height = `${textarea.scrollHeight}px`; // Set the height to match the content
+  // }; 
+
+  // Function to auto-resize the textarea
   const autoResizeTextarea = (textarea) => {
     textarea.style.height = 'auto'; // Reset the height
     textarea.style.height = `${textarea.scrollHeight}px`; // Set the height to match the content
