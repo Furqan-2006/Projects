@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const input = document.getElementById('todo-input');
   const todoList = document.getElementById('myList');
-  const add = document.getElementById('button');
+  const add = document.getElementById('Add-button');
 
   // Load Todos from localStorage on page load
   const loadTodos = () => {
@@ -104,15 +104,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // Function to handle button text updates for screen resize
   const updateButtonText = (button) => {
     if (window.innerWidth < 1199) {
-      button.innerText = button.classList.contains('edit-btn') ? '+' : 'x';
+      button.innerHTML = button.classList.contains('edit-btn') ? '<i class="bi bi-plus"></i>' : '<i class="bi bi-trash"></i>';
     } else {
-      button.innerText = button.classList.contains('edit-btn') ? 'EDIT' : 'DEL';
+      button.innerHTML = button.classList.contains('edit-btn') ? '<i class="bi bi-plus"></i>' : '<i class="bi bi-trash"></i>';
     }
   };
 
   // Resize the "Add" button text based on screen size
   const updateAddButtonText = () => {
-    add.innerHTML = window.innerWidth < 768 ? '+' : 'Add';
+    add.innerHTML = window.innerWidth < 768 ? '<i class="bi bi-plus-square-fill"></i>' : '<i class="bi bi-plus-square-fill"></i>';
   };
 
   // Initial screen size check

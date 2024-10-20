@@ -2,7 +2,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-} 
+}
 
 body {
     background: linear-gradient(135deg, rgba(34, 49, 63, 0.9), rgba(23, 32, 42, 0.9) 30%, rgb(26, 26, 64, 0.8) 60%, rgba(131, 184, 236, 0.902) 100%);
@@ -51,8 +51,13 @@ body {
 
 }
 
+.highlight {
+    /* background: greenyellow; */
+    font-weight: 700;
+}
+
 .todo-app div textarea {
-    width: 88%;
+    width: 95%;
     margin: 0.5rem auto;
     padding: 0.5rem 1.5rem;
     font-size: 1rem;
@@ -63,22 +68,22 @@ body {
     resize: none;
 
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    white-space: pre-wrap;    /* Proper text wrapping */
-    overflow: hidden;         /* Hides scrollbars */
+    white-space: pre-wrap;
+    overflow: hidden;
     outline: none;
-    resize: none;             /* Disable resizing */
-    box-sizing: border-box;   /* Include padding and border in width/height */
+    resize: none;
     min-height: 40px;
 }
 
 .todo-app div button {
     /* margin: 0; */
-    width: 12%;
+    width: 8%;
     margin: 0.5rem auto;
-    padding: 0.5rem 0.5rem;
+    /* padding: 0.5rem 0.5rem; */
     font-size: 1rem;
     border: 1px solid #34495E;
-    background-color: #FF5722;
+    background-color: #34495E;
+
     color: #FFF;
 
 }
@@ -88,7 +93,7 @@ body {
 }
 
 .todo-app ul {
-    background-color: #98FB98;
+    background-color: #003457;
     list-style: none;
     width: 100%;
 }
@@ -116,14 +121,13 @@ body {
     padding: 0.5rem;
     font-size: 1rem;
     color: whitesmoke;
-    white-space: pre-wrap;    /* Proper text wrapping */
-    overflow: hidden;         /* Hides scrollbars */
+    white-space: pre-wrap;
+    overflow: hidden;
     width: 100%;
     border: none;
     border-bottom: 0.2px solid blue;
     outline: none;
-    resize: none;             /* Disable resizing */
-    box-sizing: border-box;   /* Include padding and border in width/height */
+    resize: none;
     min-height: 40px;
 }
 
@@ -134,14 +138,15 @@ body {
 
 .todo-app ul li .delete-btn {
     /* position: absolute; */
-    padding: 0.5rem 0.7rem;
-    border: 0.5px solid red;
+    padding: 0.5rem 0.2rem;
+    border: 0.5px solid #003457;
+    border-bottom: 0.5px solid blue;
     border-top: none;
     outline: none;
     font-size: 0.8rem;
-    background-color: #F44336;
+    background-color: #002c49;
     color: #ffffff;
-    width: 6%;
+    width: 7%;
 
 }
 
@@ -151,16 +156,20 @@ body {
 
 .todo-app ul li .edit-btn {
     /* position: absolute; */
-    padding: 0.5rem 0.7rem;
-    border: 0.5px solid red;
+    padding: 0.5rem 0.2rem;
+    border: 0.5px solid #003457;
+    border-bottom: 0.5px solid blue;
     outline: none;
     font-size: 0.8rem;
-    background-color: #F44336;
+    background-color: #002c49 ;
     color: #ffffff;
-    width: 6%;
+    width: 7%;
 
 
 }
+
+
+
 
 .todo-app ul li .edit-btn:hover {
     background-color: #c5362c;
@@ -177,9 +186,9 @@ body {
     }
 
     .todo-app div textarea,
-    .todo-app div button {
-        font-size: 0.9rem;
-        padding: 0.4rem;
+    .todo-app div button i {
+        font-size: 1rem;
+        /* padding: 0.4rem; */
     }
 
     .todo-app ul li textarea {
@@ -202,6 +211,12 @@ body {
 
     .container small {
         font-size: 0.5rem;
+    }
+
+    .edit-btn i,
+    .delete-btn i,
+    .add-btn i {
+        font-size: 1rem;
     }
 
 
@@ -237,6 +252,12 @@ body {
         font-size: 0.6rem;
     }
 
+    .edit-btn i,
+    .delete-btn i,
+    .add-btn i {
+        font-size: 1.2rem;
+    }
+
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
@@ -254,13 +275,24 @@ body {
         font-size: 1rem;
     }
 
+
     .container small {
         display: none;
+    }
+
+    .edit-btn i,
+    .delete-btn i,
+    .add-btn i {
+        font-size: 1.5rem;
     }
 
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
+    .todo-app ul li textarea {
+        font-size: large;
+    }
+
     .container {
         width: 60%;
     }
@@ -268,14 +300,31 @@ body {
     .container small {
         display: none;
     }
+
+    .edit-btn i,
+    .delete-btn i,
+    .add-btn i {
+        font-size: 1.5rem;
+    }
 }
 
 @media (min-width: 1200px) {
+
+    .todo-app ul li textarea {
+        font-size: large;
+    }
+
     .container {
         width: 75%;
     }
 
     .container small {
         display: none;
+    }
+
+    .edit-btn i,
+    .delete-btn i,
+    .add-btn i {
+        font-size: 1.6rem;
     }
 }
