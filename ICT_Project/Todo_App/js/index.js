@@ -26,13 +26,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  const updateTodo = (todoItem) => {
-    const newTodoText = prompt('Edit List item:', todoItem.querySelector('textarea').value); // Use .value
-    if (newTodoText !== null) {
-      todoItem.querySelector('textarea').value = newTodoText; // Use .value
-      saveTodos(); // Update localStorage after editing
-    }
-  };
+  const copyTodo = (todoItem) => {
+    const textarea = todoItem.querySelector('textarea');
+    textarea.select();
+    navigator.clipboard.writeText(textarea.value)
+        .then(() => alert("Copied to clipboard"))
+        .catch(err => console.error("Failed to copy: ", err));
+};
+
 
   // Function to auto-resize the textarea
   const autoResizeTextarea = (textarea) => {
@@ -46,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     todoItem.innerHTML = `
         <textarea class="todo-text">${todoText}</textarea>
         <button title="delete" class="delete-btn">DEL</button>
-        <button title="edit" class="edit-btn">EDIT</button>
+        <button title="copy" class="copy-btn">EDIT</button>
     `;
 
     todoList.appendChild(todoItem);
@@ -83,19 +84,19 @@ document.addEventListener('DOMContentLoaded', () => {
       handleKeydown(event, 'Delete', deleteTodo);
     });
 
-    todoItem.querySelector('.edit-btn').addEventListener('click', () => {
-      updateTodo(todoItem);
+    todoItem.querySelector('.copy-btn').addEventListener('click', () => {
+      copyTodo(todoItem);
     });
 
     if (window.innerWidth < 769) {
       textarea.addEventListener('click', () => {
-        updateTodo(todoItem);
+        copyTodo(todoItem);
       });
-      textarea.setAttribute('title', 'click to edit');
+      textarea.setAttribute('title', 'click to copy');
     }
 
     // Update button text based on screen size for the current item
-    updateButtonText(todoItem.querySelector('.edit-btn'));
+    updateButtonText(todoItem.querySelector('.copy-btn'));
     updateButtonText(todoItem.querySelector('.delete-btn'));
 
     saveTodos(); // Save to localStorage whenever a new todo is added
@@ -104,9 +105,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Function to handle button text updates for screen resize
   const updateButtonText = (button) => {
     if (window.innerWidth < 1199) {
-      button.innerHTML = button.classList.contains('edit-btn') ? '<i class="bi bi-plus"></i>' : '<i class="bi bi-trash"></i>';
+      button.innerHTML = button.classList.contains('copy-btn') ? '<i class="bi bi-copy"></i>' : '<i class="bi bi-trash"></i>';
     } else {
-      button.innerHTML = button.classList.contains('edit-btn') ? '<i class="bi bi-plus"></i>' : '<i class="bi bi-trash"></i>';
+      button.innerHTML = button.classList.contains('copy-btn') ? '<i class="bi bi-copy"></i>' : '<i class="bi bi-trash"></i>';
     }
   };
 
@@ -125,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Update all existing todo items' buttons
     const todoItems = document.querySelectorAll('.todoItem');
     todoItems.forEach((todoItem) => {
-      updateButtonText(todoItem.querySelector('.edit-btn'));
+      updateButtonText(todoItem.querySelector('.copy-btn'));
       updateButtonText(todoItem.querySelector('.delete-btn'));
     });
   });

@@ -154,7 +154,7 @@ body {
     background-color: #c5362c;
 }
 
-.todo-app ul li .edit-btn {
+.todo-app ul li .copy-btn {
     /* position: absolute; */
     padding: 0.5rem 0.2rem;
     border: 0.5px solid #003457;
@@ -171,7 +171,7 @@ body {
 
 
 
-.todo-app ul li .edit-btn:hover {
+.todo-app ul li .copy-btn:hover {
     background-color: #c5362c;
 }
 
@@ -195,7 +195,7 @@ body {
         font-size: 1rem;
     }
 
-    .todo-app ul li .edit-btn {
+    .todo-app ul li .copy-btn {
         display: none;
     }
 
@@ -213,7 +213,7 @@ body {
         font-size: 0.5rem;
     }
 
-    .edit-btn i,
+    .copy-btn i,
     .delete-btn i,
     .add-btn i {
         font-size: 1rem;
@@ -227,7 +227,7 @@ body {
         width: 80%;
     }
 
-    .todo-app ul li .edit-btn {
+    .todo-app ul li .copy-btn {
         display: none;
     }
 
@@ -252,7 +252,7 @@ body {
         font-size: 0.6rem;
     }
 
-    .edit-btn i,
+    .copy-btn i,
     .delete-btn i,
     .add-btn i {
         font-size: 1.2rem;
@@ -280,7 +280,7 @@ body {
         display: none;
     }
 
-    .edit-btn i,
+    .copy-btn i,
     .delete-btn i,
     .add-btn i {
         font-size: 1.5rem;
@@ -301,7 +301,7 @@ body {
         display: none;
     }
 
-    .edit-btn i,
+    .copy-btn i,
     .delete-btn i,
     .add-btn i {
         font-size: 1.5rem;
@@ -322,7 +322,7 @@ body {
         display: none;
     }
 
-    .edit-btn i,
+    .copy-btn i,
     .delete-btn i,
     .add-btn i {
         font-size: 1.6rem;
