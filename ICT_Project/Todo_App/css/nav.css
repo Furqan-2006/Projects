@@ -59,6 +59,7 @@ a * {
 }
 
 .search {
+    padding: 0.5rem 0;
     display: flex;
     flex-direction: row;
     height: fit-content;
@@ -69,6 +70,7 @@ a * {
 }
 
 .search .search-btn {
+    margin: 0.5rem 0;
     /* padding: 0.2rem; */
     border: none;
     outline: none;
@@ -86,6 +88,7 @@ a * {
 }
 
 .search input {
+    margin: 0.5rem 0;
     padding: 0.5rem 0.5rem;
     outline: none;
     border: none;
