@@ -30,9 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const textarea = todoItem.querySelector('textarea');
     textarea.select();
     navigator.clipboard.writeText(textarea.value)
-        .then(() => alert("Copied to clipboard"))
-        .catch(err => console.error("Failed to copy: ", err));
-};
+      .then(() => alert("Copied to clipboard"))
+      .catch(err => console.error("Failed to copy: ", err));
+  };
 
 
   // Function to auto-resize the textarea
