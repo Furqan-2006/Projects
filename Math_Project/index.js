@@ -2,11 +2,11 @@ const prompt = require("prompt-sync")();
 
 function classifyTerm(term) {
     const simpleFunc = /^(sin|cos|tan|sec|cosec|csc|cot|ln|e)\(x\)$/;
-    const nestedFunc = /^\((.+)\)\^(\d+)$/;
+    const powerFunc = /^\((.+)\)\^(\d+)$/;
     const nestedTrigFunc = /^(sin|cos|tan|sec|cosec|csc|cot)\((.+)\)$/;
     const productFunc = /(.+)\*(.+)/;
     const qoutientFunc = /(.+)\/(.+)/;
-    const linearFunc = /^([+-]?\d*)x([+-]\d+)?$/;
+    const linearFunc = /^([+-]?\d*)x\s*([+-]\s*\d+)?$/;
     const constant = /^[+-]?\d+(\.\d+)?$/;
 
 
@@ -16,8 +16,8 @@ function classifyTerm(term) {
     if (qoutientFunc.test(term)) {
         return "DIVISION";
     }
-    if (nestedFunc.test(term)) {
-        return "NESTED FUNCTION";
+    if (powerFunc.test(term)) {
+        return "POWER FUNCTION";
     }
     if (term.includes("x^")) return "ALGEBRAIC";
 
@@ -83,7 +83,7 @@ function differentiate(term) {
     if (unsignedTerm === "cosec(x)") return `${sign} (-cosec(x)*tan(x))`;
 
 
-    if (classifyTerm(unsignedTerm) === "NESTED FUNCTION") {
+    if (classifyTerm(unsignedTerm) === "POWER FUNCTION") {
         const match = unsignedTerm.match(/^\((.+)\)\^(\d+)$/);
         if (match) {
             const base = match[1];
@@ -91,6 +91,8 @@ function differentiate(term) {
 
             const innerToken = tokenizeExpression(base);
             const diffInner = innerToken.map(differentiate).join(" ");
+            console.log(diffInner);
+
 
             return `${exp}(${base})^${exp - 1} * ${diffInner}`;
         }
@@ -107,8 +109,8 @@ function differentiate(term) {
 
     if (classifyTerm(unsignedTerm) === "ALGEBRAIC") {
         const match = unsignedTerm.match(/^(\d*)x(?:\^(\d+))?$/);
-        console.log("IN ALGEBRIC DIFFERENTIATION");
-        console.log(match);
+        // console.log("IN ALGEBRIC DIFFERENTIATION");
+        // console.log(match);
 
         if (match) {
             const coeff = match[1] === "" ? 1 : Number(match[1]);
@@ -180,8 +182,10 @@ function differentiate(term) {
     if (classifyTerm(unsignedTerm) === "CONSTANT") {
         const match = unsignedTerm.match(/^[+-]?\d+(\.\d+)?$/);
         if (match) {
-            const derivative = "0"
+            const derivative = " ";
+            // const derivative = "0";
             Number(derivative);
+            // return `${derivative}`;
             return `${derivative}`;
         }
     }
@@ -193,6 +197,10 @@ let expression = prompt("Enter Expression: ");
 // console.log(expression);
 if (expression.trim() === "") {
     console.error("INVALID INPUT!");
+
+}
+else if (classifyTerm(expression) === "CONSTANT") {
+    console.log("0");
     
 }
 else {
@@ -206,10 +214,11 @@ else {
     }
 
     // Filter out "0" terms before joining
-    if (classifyTerm(expression) !== "CONSTANT") {
-        diffTerms = diffTerms.filter(term => term && term.trim() !== "0").join(" ");
+    // if (classifyTerm(expression) !== "CONSTANT") {
+    //     diffTerms = diffTerms.filter(term => term && term.trim() !== "0").join(" ");
 
-    }
+    // }
+    diffTerms = diffTerms.filter(term => term && term.trim() !== "0").join(" ");
 
     console.log(`${diffTerms}`);
     // console.log(classifyTerm((expression)));
