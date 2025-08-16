@@ -2,16 +2,16 @@ const prompt = require("prompt-sync")();
 
 // Regular Expressions for Classification
 const patterns = {
-    simpleTrigFunc: /^(sin|cos|tan|sec|cosec|csc|cot)\(x\)$/,
-    powerFunc: /^\((.+)\)\s*\^\s*(\d+)$/,
-    nestedTrigFunc: /^(sin|cos|tan|sec|cosec|csc|cot)\((.+)\)$/,
-    productFunc: /(.+)\s*\*\s*(.+)/,
-    quotientFunc: /(.+)\s*\/\s*\((.+)\)/,
+    simpleTrigFunc: /^([+-]?\d*)(sin|cos|tan|sec|cosec|csc|cot)\((x)\)$/,
+    powerFunc: /^([+-]?\d*)\((.+)\)\s*\^\s*(\d+)$/,
+    nestedTrigFunc: /^([+-]?\d*)(sin|cos|tan|sec|cosec|csc|cot)\((.+)\)$/,
+    productFunc: /^([+-]?\d*)(.+)\s*\*\s*(.+)$/,
+    quotientFunc: /^([+-]?\d*)(.+)\s*\/\s*\((.+)\)$/,
     linearFunc: /^([+-]?\d*)x\s*([+-]\s*\d+)?$/,
     constant: /^[+-]?\d+(\.\d+)?$/,
-    expFunc: /^(e|\d+)\s*\^\s*\((.+)\)/,
-    logFunc: /^(ln)\((.+)\)/,
-    inverseTrigFunc: /^(arcsin|arccos|arctan|arcsec|arccosec|arccsc|arccot)\((.+)\)$/
+    expFunc: /^([+-]?\d*)(e|\d+)\s*\^\s*\((.+)\)$/,
+    logFunc: /^([+-]?\d*)(ln)\((.+)\)$/,
+    inverseTrigFunc: /^([+-]?\d*)(arcsin|arccos|arctan|arcsec|arccosec|arccsc|arccot)\((.+)\)$/
 };
 
 // Classify the term based on regex patterns
@@ -65,14 +65,28 @@ function differentiate(term) {
     if (unsignedTerm === "e^x") return `${sign} e^x`;
 
     const trigDerivatives = {
-        "sin(x)": "cos(x)",
-        "cos(x)": "-sin(x)",
-        "tan(x)": "sec^2(x)",
-        "cot(x)": "-cosec^2(x)",
-        "sec(x)": "sec(x)*tan(x)",
-        "cosec(x)": "-cosec(x)*cot(x)",
+        "sin": "cos(x)",
+        "cos": "-sin(x)",
+        "tan": "sec^2(x)",
+        "cot": "-cosec^2(x)",
+        "sec": "sec(x)*tan(x)",
+        "cosec": "-cosec(x)*cot(x)",
 
     };
+
+    if (classifyTerm(unsignedTerm) === "TRIGONOMETRIC") {
+        const match = unsignedTerm.match(patterns.simpleTrigFunc);
+        if (match) {
+            const coeff = match[1];
+            const trigFunc = match[2];
+            const trigFuncAngle = match[3];
+            if (trigFuncAngle === "x") {
+                return `${sign} ${coeff}(${trigDerivatives[trigFunc]})`
+            }
+        }
+    }
+
+
     if (trigDerivatives[unsignedTerm]) return `${sign} ${trigDerivatives[unsignedTerm]}`;
 
     if (classifyTerm(unsignedTerm) === "POWER") {
@@ -80,10 +94,11 @@ function differentiate(term) {
         // console.log(match[1]);
         // console.log(match[2]);
         if (match) {
-            const base = match[1];
-            const exp = Number(match[2]);
+            const coeff = match[1];
+            const base = match[2];
+            const exp = Number(match[3]);
             const diffbase = differentiate(match[1]);
-            return `${sign} ${exp}(${base})^${exp - 1} (${diffbase})`;
+            return `${sign} ${coeff}( ${exp}(${base})^${exp - 1} (${diffbase}) )`;
 
         }
     }
@@ -98,23 +113,27 @@ function differentiate(term) {
 
     if (classifyTerm(unsignedTerm) === "PRODUCT") {
         const match = unsignedTerm.match(patterns.productFunc);
+
         if (match) {
-            const u = match[1].trim();
-            const v = match[2].trim();
+            const coeff = match[1];
+            const u = match[2].trim();
+            const v = match[3].trim();
             const du = differentiate(u);
             const dv = differentiate(v);
-            return `${sign} (${du} * ${v} + ${u} * ${dv})`;
+            return `${sign} ${coeff}( (${du} * ${v} + ${u} * ${dv}) )`;
         }
     }
 
     if (classifyTerm(unsignedTerm) === "DIVISION") {
         const match = unsignedTerm.match(patterns.quotientFunc);
         if (match) {
-            const u = match[1].trim();
-            const v = match[2].trim();
+            const coeff = match[1];
+
+            const u = match[2].trim();
+            const v = match[3].trim();
             const du = differentiate(u);
             const dv = differentiate(v);
-            return `${sign} (${du} * ${v} - ${u} * ${dv}) / (${v})^2`;
+            return `${sign} ${coeff}((${du} * ${v} - ${u} * ${dv}) / (${v})^2 )`;
         }
     }
 
@@ -130,59 +149,62 @@ function differentiate(term) {
     if (classifyTerm(unsignedTerm) === "EXPONENTIAL") {
         const match = unsignedTerm.match(patterns.expFunc);
         if (match) {
-            const base = match[1];
-            const exp = match[2];
+            const coeff = match[1];
+            const base = match[2];
+            const exp = match[3];
             const diffexp = differentiate(exp);
-            return `(${match[0]}) (ln(${base})(${diffexp})) `
+            return `${coeff}(${match[0]}) (ln(${base})(${diffexp})) `
         }
     }
 
     if (classifyTerm(unsignedTerm) === "LOGARATHMIC") {
         const match = unsignedTerm.match(patterns.logFunc);
         if (match) {
-            console.log(match[0]);
-            console.log(match[1]);
-            console.log(match[2]);
-
-            const u = match[2];
+            // console.log(match[0]);
+            // console.log(match[1]);
+            // console.log(match[2]);
+            const coeff = match[1];
+            const u = match[3];
             const diffInner = differentiate(u);
 
-            return `${sign}(${diffInner}) / (${u})`
+            return `${sign} ${coeff}( (${diffInner}) / (${u}) )`
         }
     }
 
     if (classifyTerm(unsignedTerm) === "NESTED TRIGONOMETRIC") {
         const match = unsignedTerm.match(patterns.nestedTrigFunc);
         if (match) {
-            const outerFunc = match[1];
-            const innerFunc = match[2];
+            const coeff = match[1];
+            const outerFunc = match[2];
+            const innerFunc = match[3];
             const diffOuter = differentiate(`${outerFunc}(x)`);
             const diffInner = differentiate(innerFunc);
-            return `${sign} (${diffOuter.replace("x", `(${innerFunc})`)} * (${diffInner}))`
+            return `${sign} ${coeff} ( ${diffOuter.replace("x", `(${innerFunc})`)} * (${diffInner}) )`
 
         }
     }
     if (classifyTerm(unsignedTerm) === "INVERSE TRIGONOMETRIC") {
         const match = unsignedTerm.match(patterns.inverseTrigFunc);
-        const innerFunc = match[2];
+        const coeff = match[1];
+        const innerFunc = match[3];
 
         if (/arcsin/.test(unsignedTerm)) {
-            return `${differentiate(innerFunc)} / sqrt(1 - (${innerFunc})^2)`;
+            return `${coeff}(${differentiate(innerFunc)} / sqrt(1 - (${innerFunc})^2))`;
         }
         if (/arccos/.test(unsignedTerm)) {
-            return `-( ${differentiate(innerFunc)} / sqrt(1 - (${innerFunc})^2) )`;
+            return `${coeff}( -( ${differentiate(innerFunc)} / sqrt(1 - (${innerFunc})^2) ) )`;
         }
         if (/arctan/.test(unsignedTerm)) {
-            return `${differentiate(innerFunc)} / (1 + (${innerFunc})^2)`;
+            return `${coeff}(${differentiate(innerFunc)} / (1 + (${innerFunc})^2) )`;
         }
         if (/arccot/.test(unsignedTerm)) {
-            return `-( ${differentiate(innerFunc)} / (1 + (${innerFunc})^2) )`;
+            return `${coeff}( -( ${differentiate(innerFunc)} / (1 + (${innerFunc})^2) ) )`;
         }
         if (/arcsec/.test(unsignedTerm)) {
-            return `${differentiate(innerFunc)} / (|${innerFunc}| * sqrt(((${innerFunc})^2) - 1))`;
+            return `${coeff}( ${differentiate(innerFunc)} / (|${innerFunc}| * sqrt(((${innerFunc})^2) - 1)) )`;
         }
         if (/arccosec|arccsc/.test(unsignedTerm)) {
-            return `-( ${differentiate(innerFunc)} / (|${innerFunc}| * sqrt(((${innerFunc})^2) - 1)) )`;
+            return `${coeff}( -( ${differentiate(innerFunc)} / (|${innerFunc}| * sqrt(((${innerFunc})^2) - 1)) ) )`;
         }
 
 
@@ -202,14 +224,26 @@ function integrate(term) {
     if (unsignedTerm === "e^x") return `${sign} e^x`;
 
     const trigIntegrals = {
-        "sin(x)": "-cos(x)",
-        "cos(x)": "sin(x)",
-        "tan(x)": "ln|sec(x)|",
-        "cot(x)": "ln|sin(x)|",
-        "sec(x)": "ln|sec(x) + tan(x)|",
-        "cosec(x)": "-ln|cosec(x) + cot(x)|"
+        "sin": "-cos(x)",
+        "cos": "sin(x)",
+        "tan": "ln|sec(x)|",
+        "cot": "ln|sin(x)|",
+        "sec": "ln|sec(x) + tan(x)|",
+        "cosec": "-ln|cosec(x) + cot(x)|"
     };
-    if (trigIntegrals[unsignedTerm]) return `${sign} ${trigIntegrals[unsignedTerm]}`;
+
+    if (classifyTerm(unsignedTerm) === "TRIGONOMETRIC") {
+        const match = unsignedTerm.match(patterns.simpleTrigFunc);
+        if (match) {
+            const coeff = match[1];
+            const trigFunc = match[2];
+            const trigFuncAngle = match[3];
+
+            if (trigFuncAngle === "x") {
+                return `${sign} ${coeff}(${trigIntegrals[trigFunc]})`;
+            }
+        }
+    }
 
     //ILATE
     function applyILATERule(uTerm, vPrimeTerm) {
@@ -228,7 +262,7 @@ function integrate(term) {
         const match = unsignedTerm.match(patterns.productFunc);
 
         if (match) {
-            const { u, dv } = applyILATERule(match[1], match[2]);
+            const { u, dv } = applyILATERule(match[2], match[3]);
 
             const v = integrate(dv.trim());
             const du = differentiate(u.trim());
@@ -262,8 +296,8 @@ function integrate(term) {
     if (classifyTerm(unsignedTerm) === "EXPONENTIAL") {
         const match = unsignedTerm.match(patterns.expFunc);
         if (match) {
-            const base = match[1];
-            const exp = match[2];
+            const base = match[2];
+            const exp = match[3];
             const diffExp = differentiate(exp);
 
             if (base === "e") {
@@ -282,26 +316,34 @@ function integrate(term) {
     if (classifyTerm(unsignedTerm) === "DIVISION") {
         const match = unsignedTerm.match(patterns.quotientFunc);
 
-
         if (match) {
-            if (match[1] === "1") {
-                const u = match[2];
+            if (match[2] === "1") {
+                const u = match[3];
                 const umatch = u.match(patterns.powerFunc);
 
                 const x = umatch[1];
                 const exp = -1 * Number(umatch[2]);
 
                 const newU = integrate(`x^(${exp})`);
-                return `${newU.replace("x", `(${x})`)} `
-
+                return `${newU.replace("x", `(${x})`)} `;
             }
 
-            const denominator = match[2];
+            const denominator = match[3];
             const numerator = tokenizeExpression(denominator);
+
             const differentiatedTerms = numerator.map(differentiate).filter(term => term.trim()).join(" ");
+
+            const denominatorDifferentiation = differentiate(denominator);
+
+            if (denominatorDifferentiation.trim() === "0") {
+                return `ln|${denominator}|`;
+            }
+
+            return `(${differentiatedTerms}) / (${denominatorDifferentiation})`;
 
         }
     }
+
     return `${sign} UNKNOWN_INTEGRAL(${unsignedTerm})`;
 }
 

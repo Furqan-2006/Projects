@@ -1,0 +1,156 @@
+/* styles.css */
+body {
+    font-family: sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+    margin-top: 40px;
+    background-color: #000000ea; /* Already dark, keeping it */
+    color: #f5f5f5; /* Default text color to white for readability on dark background */
+    height: 150vh;
+}
+
+.header p {
+    color: #5744ff;
+    font-weight: bolder;
+    font-size: 27px;
+}
+
+.header p span {
+    color: #00a50e;
+    font-size: 29px;
+}
+
+.header img {
+    width: 90px;
+    height: 90px;
+    background-color: #ffffff60;
+    background-blend-mode: overlay;
+    border-radius: 12px;
+}
+
+h1, h2 {
+    color: #fff; /* Changed to white for dark theme */
+    font-size: 30px;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    background-color: #007BFF; /* Keeping the blue, but we can adjust if needed */
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+button:hover {
+    background-color: #0056b3; /* Slightly darker blue on hover */
+}
+
+.transaction-form {
+    margin: 10px auto;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.transaction-form input {
+    padding: 10px;
+    border: 1px solid #444; /* Darker border for dark theme */
+    border-radius: 5px;
+    background-color: #222; /* Dark background for input */
+    color: #fff; /* White text in input */
+}
+
+.transaction-form input::placeholder {
+    color: #aaa; /* Lighter placeholder text for contrast */
+}
+
+.dropdown-content {
+    display: none;
+    margin: 10px auto;
+    padding: 10px;
+    background-color: #1a1a1a; /* Darker background */
+    border: 1px solid #444; /* Darker border */
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* Darker shadow */
+}
+
+.dropdown-content.active {
+    display: block;
+}
+
+.add-lender-form {
+    display: none;
+    margin: 10px auto;
+    padding: 10px;
+    background-color: #1a1a1a; /* Darker background */
+    border: 1px solid #444; /* Darker border */
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* Darker shadow */
+}
+
+.add-lender-form.active {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.add-lender-form input {
+    padding: 10px;
+    border: 1px solid #444; /* Darker border */
+    border-radius: 5px;
+    background-color: #222; /* Dark background for input */
+    color: #fff; /* White text in input */
+}
+
+.add-lender-form input::placeholder {
+    color: #aaa; /* Lighter placeholder text for contrast */
+}
+
+#lender-list, #expense-list {
+    margin: 10px auto;
+    padding: 0;
+    list-style: none;
+}
+
+#lender-list li, #expense-list li {
+    background-color: #1a1a1a; /* Darker background for list items */
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #444; /* Darker border */
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff; /* White text for readability */
+}
+
+/* Notification Styles */
+.notification {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ff5555; /* Slightly lighter red for better visibility on dark background */
+    color: #fff; /* White text for contrast */
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* Darker shadow */
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    z-index: 1000;
+    display: none;
+}
+
+.notification.show {
+    display: block;
+    opacity: 1;
+}
+
+.column{
+    display:flex;
+    flex-direction:column;
+}
