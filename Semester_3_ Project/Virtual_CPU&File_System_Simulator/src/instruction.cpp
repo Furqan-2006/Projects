@@ -49,6 +49,45 @@ void InstructionSet::execute()
             int reg2 = inst.operands[1][1] - '0';
             cpu->registers[reg1] -= cpu->registers[reg2];
         }
+        else if (inst.opcode == "MUL")
+        {
+            int reg1 = inst.operands[0][1] - '0';
+            int reg2 = inst.operands[1][1] - '0';
+            cpu->registers[reg1] *= cpu->registers[reg2];
+        }
+        else if (inst.opcode == "DIV")
+        {
+            int reg1 = inst.operands[0][1] - '0';
+            int reg2 = inst.operands[1][1] - '0';
+            cpu->registers[reg1] /= cpu->registers[reg2];
+        }
+        else if (inst.opcode == "CMP")
+        {
+            int reg1 = inst.operands[0][1] - '0';
+            int reg2 = inst.operands[1][1] - '0';
+
+            if (cpu->registers[reg1] == cpu->registers[reg2])
+            {
+                cpu->zeroFlag = true;
+            }
+            else
+            {
+                cpu->zeroFlag = false;
+            }
+        }
+        else if (inst.opcode == "JE")
+        {
+            int target = std::stoi(inst.operands[0]);
+            if (cpu->zeroFlag)
+            {
+                cpu->pc = target - 1;
+            }
+        }
+        else if (inst.opcode == "JMP")
+        {
+            int target = std::stoi(inst.operands[0]);
+            cpu->pc = target - 1;
+        }
         else if (inst.opcode == "PRINT")
         {
             int reg = inst.operands[0][1] - '0';

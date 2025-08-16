@@ -12,8 +12,10 @@ int main()
 
     std::vector<std::string> program = {
         "MOV R0, 5",
-        "MOV R1, 3",
-        "ADD R0, R1",
+        "MOV R1, 5",
+        "CMP R0, R1",
+        "JE 6",
+        "MOV R2, 99",
         "PRINT R0"};
 
     instr.loadProgram(program);
